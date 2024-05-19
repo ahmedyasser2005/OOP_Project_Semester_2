@@ -3,7 +3,7 @@ using namespace std;
 
 class information{
 protected:
-    string 
+    string account_name, 
 };
 
 class bank_account{
