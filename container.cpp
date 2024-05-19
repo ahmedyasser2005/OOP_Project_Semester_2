@@ -8,3 +8,18 @@
 #include "include/Nationalities.h"
 #include "include/StatusCategories.h"
 #include "include/ScholarsAccounts.h"
+
+
+
+Database DB; // high priority
+
+// any priority
+Fields FI;
+Persons PE;
+Payments PA;
+Scholars SA;
+Applications AP;
+BankAccounts BA;
+Scholarships SH;
+Nationalities NA;
+StatusCategories SC;
