@@ -22,9 +22,9 @@ This is a simple interface for help our OOP Team-Project to save Scholarship Sys
 ## App
         - Uing code 
 ## Team Members
-- Mahros AL-Qabasy (TASK CREATOR)
-- Ahmed Yaser Abdelrahman
-- Ahmed Yaser Unkown
+- Mahros AL-Qabasy
+- Ahmed Yaser Eissa
+- Ahmed Yaser Lotfy
 - Mostafa Saleh
 - AL-Desouky
 - Khadiga
