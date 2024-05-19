@@ -888,7 +888,6 @@ void accountSecuritySettings(user_account& account, unsigned short msg = 0){
     }
 }
 
-
 void studyFinderCustomSearch(user_account& account, string country = "___", string deg_lvl = "___", string stu_prog = "___", string gpa = "___", string eng_lvl = "___", string tuition = "___"){
 
     studyFinderCustomisedSearchDisplay(account.getUsername(), country, deg_lvl, stu_prog, gpa, eng_lvl, tuition);

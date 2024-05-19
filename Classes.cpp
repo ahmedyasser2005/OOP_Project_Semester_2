@@ -1,189 +1,173 @@
 #include <iostream>
+#include <string>
+
 using namespace std;
 
-class information{
-protected:
-    string account_name, 
-};
+enum region { Africa = 1, Europe, America, Asia };
+enum gender { Male = false, Female = true };
+enum degree_level { Highschool = 1, Undergraduate, Postgraduate };
+enum english_level { A1 = 1, A2, B1, B2, C1, C2 };
+enum study_programme { ComputerScience = 1, Engineering, Business, Arts, Media };
 
-class bank_account{
+class person {
+protected:
+    string real_name;
+    gender p_gender;
+    region p_region;
+    unsigned short age;
+    float gpa;
+    degree_level degree_lvl;
+    english_level english_lvl;
+};
+class account {
+protected:
+    string user_name;
+    string user_password;
+    unsigned int user_id;
+};
+class studyFinderAccount : public person, public account {
+public:
+    // Constructor
+    studyFinderAccount(string un, string pw) {
+        user_name = un;
+        user_password = pw;
+    }
+
+    // Friend function
+    friend bool basedOnProfile(studyFinderAccount&, university&);
+
+    // Set Methods
+    void setUsername(string un) { user_name = un; }
+    void setPassword(string pw) { user_password = pw; }
+    void setFullname(string rn) { real_name = rn; }
+    void setNationality(region r) { p_region = r; }
+    void setGender(gender g) { p_gender = g; }
+    void setAge(unsigned short a) { age = a; }
+    void setDegreeLvl(degree_level dl) { degree_lvl = dl; }
+    void setEnglishLvl(english_level el) { english_lvl = el; }
+    void setGPA(float g) { gpa = g; }
+
+    // Get Methods
+    string getUsername() const { return user_name; }
+    string getPassword() const { return user_password; }
+    string getFullname() const { return real_name; }
+    region getRegion() const { return p_region; }
+    gender getGender() const { return p_gender; }
+    unsigned short getAge() const { return age; }
+    degree_level getDegreeLvl() const { return degree_lvl; }
+    english_level getEnglishLvl() const { return english_lvl; }
+    float getGPA() const { return gpa; }
+};
+class bankAccount : public account {
 private:
-    
-    string accountName, pinCode;
-    unsigned int accountNumber;
     double balance = 0;
 
 public:
-    
-    // Constructors
-    bank_account(string name, string pin, unsigned int num): accountName(name), pinCode(pin), accountNumber(num) {}
+    // Constructor
+    bankAccount(string un, string pw, unsigned int id) {
+        user_name = un;
+        user_password = pw;
+        user_id = id;
+    }
 
     // Main Methods
-    unsigned short deposit(double amount){
-        if (amount < 5)
-        
+    unsigned short deposit(double amount) {
+        if (amount < 5) {
             return 1;
-        
-        else if (amount > 10000)
-
+        } else if (amount > 10000) {
             return 2;
-        
-        else{
-        
+        } else {
             balance += amount;
             return 3;
-
         }
     }
-    unsigned short withdraw(double amount){
-        if (amount < 5)
-        
-            return 1;
-        
-        else if (amount > 10000)
 
+    unsigned short withdraw(double amount) {
+        if (amount < 5) {
+            return 1;
+        } else if (amount > 10000) {
             return 2;
-        
-        else{
-        
+        } else {
             balance -= amount;
             return 3;
-            
         }
     }
-    bool transfer(double amount, bank_account& account){
-        if (amount < 5){
+
+    bool transfer(double amount, bankAccount& account) {
+        if (amount < 5) {
             cout << "|[BANK]| Transaction Failed, amount to transfer must be at least 5$\n";
             return false;
-        }else if (amount > balance){
+        } else if (amount > balance) {
             cout << "|[BANK]| Transaction Failed, insufficient balance.\n";
             return false;
-        }else{
+        } else {
             balance -= amount;
             account.balance += amount;
-            cout << "|[BANK]| " << amount << "$ is successfully transferred to " << account.accountName << ".\n";
+            cout << "|[BANK]| " << amount << "$ is successfully transferred to " << account.getName() << ".\n";
             return true;
         }
     }
+
     void display() const {
-        cout << "|[BANK]| Account Name   : " << accountName << '\n'
-             << "       | Account Number : " << accountNumber << '\n'
+        cout << "|[BANK]| Account Name   : " << user_name << '\n'
+             << "       | Account ID     : " << user_id << '\n'
              << "       | Balance        : " << balance << "$\n\n";
     }
 
     // Set Methods
-    void setName(string name)        { accountName = name;  }
-    void setNumber(unsigned int num) { accountNumber = num; }
-    void setBalance(double b)        { balance = b;         }
-    void setPinCode(string pc)       { pinCode = pc;        }
+    void setName(string name) { user_name = name; }
+    void setNumber(unsigned int num) { user_id = num; }
+    void setBalance(double b) { balance = b; }
+    void setPinCode(string pc) { user_password = pc; }
 
     // Get Methods
-    string getName()         const { return accountName;   }
-    unsigned int getNumber() const { return accountNumber; }
-    double getBalance()      const { return balance;       }
-    string getPinCode()      const { return pinCode;       }
-
+    string getName() const { return user_name; }
+    unsigned int getNumber() const { return user_id; }
+    double getBalance() const { return balance; }
+    string getPinCode() const { return user_password; }
 };
-class user_account{
+class university : public person {
 private:
-
-    string username, email, password; // Account Security Settings
-    string fullname, nationality, phone_number; // Student Profile
-    bool gender; // Male(1), Female(0)
-    unsigned short age;
-    unsigned short degree_lvl; // Highschool(1), Undergraduate(2), Postgraduate(3)
-    unsigned short english_lvl; // A1(1), A2(2), B1(3), B2(4), C1(5), C2(6)
-    float gpa; // Out of 4 grading system
+    string name;
+    string desc;
+    study_programme programme;
+    double tuition_fees;
 
 public:
-
-    // Constructors
-    user_account(string un, string em, string pw): username(un), email(em), password(pw) {}
-
-    // Operator Overloading
-    bool operator >(user_account student) const { // Compare student profiles
-        unsigned int score1 = 0, score2 = 0;
-        (english_lvl > student.english_lvl && english_lvl != student.english_lvl) ? ++score1 : ++score2;
-        (gpa > student.gpa && gpa != student.gpa) ? ++score1 : ++score2;
-
-        return (score1 > score2) ? true : false;
+    // Constructor
+    university(string _name, region _region, string _desc, study_programme _prog,
+               unsigned short _age, degree_level _degree_lvl, english_level _english_lvl,
+               double _tuition_fees, float _gpa) {
+        name = _name;
+        p_region = _region;
+        desc = _desc;
+        programme = _prog;
+        age = _age;
+        degree_lvl = _degree_lvl;
+        english_lvl = _english_lvl;
+        tuition_fees = _tuition_fees;
+        gpa = _gpa;
     }
 
-    friend bool basedOnProfile(user_account&, university&);
-
-    // Set Methods
-    void setUsername(string un) { username = un; }
-    void setEmail(string em)    { email = em;    }
-    void setPassword(string pw) { password = pw; }
-
-    void setFullname(string fn)             { fullname = fn;       }
-    void setNationality(string nat)         { nationality = nat;   }
-    void setPhoneNumber(string pn)          { phone_number = pn;   }
-    void setGender(bool g)                  { gender = g;          }
-    void setAge(unsigned short a)           { age = a;             }
-    void setDegreeLvl(unsigned short dl)    { degree_lvl = dl;     }
-    void setEnglishLvl(unsigned short el)   { english_lvl = el;    }
-    void setGPA(float g)                    { gpa = g;             }
-
-    // Get Methods
-    string getUsername() const { return username; }
-    string getEmail()    const { return email;    }
-    string getPassword() const { return password; }
-
-    string getFullname()           const { return fullname;      }
-    string getNationality()        const { return nationality;   }
-    string getPhoneNumber()        const { return phone_number;  }
-    bool getGender()               const { return gender;        }
-    unsigned short getAge()        const { return age;           }
-    unsigned short getDegreeLvl()  const { return degree_lvl;    }
-    unsigned short getEnglishLvl() const { return english_lvl;   }
-    float getGPA()                 const { return gpa;           }
-
-};
-class university{
-private:
-
-    string name, country, desc, contact;
-    unsigned short age;
-    unsigned short programme; // Computer Science(1), Medicine(2), Business(3), Arts & Design(4), Media(5)
-    unsigned short degree_lvl; // Highschool(1), Undergraduate(2), Postgraduate(3)
-    unsigned short english_lvl; // A1(1), A2(2), B1(3), B2(4), C1(5), C2(6)
-    unsigned int ranking; // Based on QS ranking system
-    double tution_fees;
-    float gpa; // Out of 4 grading system
-    float duration; // In years
-    bank_account bank = {name, "000", ranking};
-
-public:
-
-    university(string _name, string _country, string _desc, string _contact, unsigned short _prog,
-        unsigned short _age, unsigned short _degree_lvl, unsigned short _english_lvl,
-        double _tution_fees, float _gpa, float _duration, int _ranking):
-            name(_name), country(_country), desc(_desc), contact(_contact), programme(_prog), age(_age),
-            degree_lvl(_degree_lvl), english_lvl(_english_lvl), tution_fees(_tution_fees),
-            gpa(_gpa), duration(_duration), ranking(_ranking) {}
-
-    bool operator >(const university& uni) const { // Compare universities
-        
-        unsigned short score1 = 0, score2 = 0; // Score of acceptance difficulty
-
-        (english_lvl > uni.english_lvl && english_lvl != uni.english_lvl) ? ++score1 : ++score2;
-        (gpa > uni.gpa && gpa != uni.gpa) ? ++score1 : ++score2;
-
-        return (score1 > score2) ? true : false;
+    // Comparison operator
+    bool operator >(const university& uni) const {
+        unsigned short score1 = 0, score2 = 0;
+        (english_lvl > uni.english_lvl) ? ++score1 : ++score2;
+        (gpa > uni.gpa) ? ++score1 : ++score2;
+        return (score1 > score2);
     }
 
+    // Display in list
     void showInList(int i) const {
-        cout << "|[" << i+1 << "]| Uni: " << name << " | Country: " << country << " | Degree: " << degree_lvl << " | Programme: " << programme << " | Tuition Fees: " << tution_fees << "$.\n"
-             << desc << "\n\n";
+        cout << "|[" << i + 1 << "]| Uni: " << name << " | Region: " << p_region
+             << " | Degree: " << degree_lvl << " | Programme: " << programme
+             << " | Tuition Fees: " << tuition_fees << "$.\n" << desc << "\n\n";
     }
 
-    friend bool basedOnProfile(user_account&, university&);
-
-    double getTuitionFees()         const { return tution_fees; }
-    unsigned int getRanking()       const { return ranking;     }
-    unsigned short getDegreeLvl()   const { return degree_lvl;  }
-    unsigned short getEnglishLvl()  const { return english_lvl; }
-    float getGPA()                  const { return gpa;         }
-
+    // Get Methods
+    double getTuitionFees() const { return tuition_fees; }
+    degree_level getDegreeLvl() const { return degree_lvl; }
+    english_level getEnglishLvl() const { return english_lvl; }
+    float getGPA() const { return gpa; }
 };
+
