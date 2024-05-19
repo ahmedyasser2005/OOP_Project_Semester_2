@@ -228,8 +228,11 @@ bool compareUniverisitiesByRanking(const university& un1, const university& uni2
     return uni1.getRanking() < uni2.getRanking();
 }
 
+// Data System Here (Mahrous Task)
 vector<bank_account> bank_accounts_data;
+
 vector<user_account> user_accounts_data;
+
 vector<university> universities_data = {uni1, uni2, uni3};
 
 
@@ -662,8 +665,6 @@ void bankMainMenu(bank_account& account, bool showInfo = false){
 
 }
 
-
-
 void studyFinderLogin(string username_or_email = "*** Username/Email...", string password = "*** Password...", unsigned short msg = 0){
 
     studyFinderLoginDisplay(username_or_email, password, msg);    
@@ -887,6 +888,7 @@ void accountSecuritySettings(user_account& account, unsigned short msg = 0){
     }
 }
 
+
 void studyFinderCustomSearch(user_account& account, string country = "___", string deg_lvl = "___", string stu_prog = "___", string gpa = "___", string eng_lvl = "___", string tuition = "___"){
 
     studyFinderCustomisedSearchDisplay(account.getUsername(), country, deg_lvl, stu_prog, gpa, eng_lvl, tuition);
@@ -1079,8 +1081,6 @@ void studyFinderMainMenu(user_account& account){
     }
 
 }
-
-
 
 void start(){
     startDisplay();
