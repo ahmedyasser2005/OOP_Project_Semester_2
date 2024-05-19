@@ -1039,6 +1039,9 @@ void studyFinderShowAllOptions(user_account& account){
 
     cout << "|[STUDY-FINDER]| Enter '0' to cancel selection...\n";
     if (choose(0, universities_data.size())){
+        // Ahmed ElTweel Task
+
+        
 
     }else{
         studyFinderShowAllOptions(account);
