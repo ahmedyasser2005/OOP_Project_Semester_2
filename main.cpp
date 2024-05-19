@@ -3,35 +3,83 @@
 #include <vector>
 using namespace std;
 
+enum region { Africa = 1, Europe, America, Asia };
+enum gender { Male = false, Female = true };
+enum degree_level { Highschool = 1, Undergraduate, Postgraduate };
+enum english_level { A1 = 1, A2, B1, B2, C1, C2 };
+enum study_programme { ComputerScience = 1, Engineering, Business, Arts, Media };
+
 // Pre-Definitions
 class user_account;
 class university;
 bool basedOnProfile(user_account&, university&);
 // Classes ========================================================
+class person {
+protected:
+    string real_name;
+    gender p_gender;
+    region p_region;
+    unsigned short age;
+    float gpa;
+    degree_level degree_lvl;
+    english_level english_lvl;
+
+public:
+    // Constructor
+    person(const string &name = "", gender g = Male, region r = Africa,
+           unsigned short a = 0, float gpa = 0.0, degree_level dl = Highschool,
+           english_level el = A1)
+        : real_name(name), p_gender(g), p_region(r), age(a), gpa(gpa),
+          degree_lvl(dl), english_lvl(el) {}
+
+    // Constructor for derived classes
+    person(region r, float gpa, degree_level dl, english_level el)
+        : real_name(""), p_gender(Male), p_region(r), age(0), gpa(gpa),
+          degree_lvl(dl), english_lvl(el) {}
+};
+
+class account : public person {
+protected:
+    string user_name;
+    string user_password;
+    unsigned int user_id;
+
+public:
+    // Constructor
+    account(const string &username = "", const string &password = "", unsigned int id = 0,
+            const string &name = "", gender g = Male, region r = Africa,
+            unsigned short a = 0, float gpa = 0.0, degree_level dl = Highschool,
+            english_level el = A1)
+        : person(name, g, r, a, gpa, dl, el), user_name(username), user_password(password), user_id(id) {}
+
+    // Constructor for derived classes
+    account(const string &username, const string &password, unsigned int id, region r, float gpa, degree_level dl, english_level el)
+        : person(r, gpa, dl, el), user_name(username), user_password(password), user_id(id) {}
+};
 class bank_account{
 private:
-    
+
     string accountName, pinCode;
     unsigned int accountNumber;
     double balance = 0;
 
 public:
-    
+
     // Constructors
     bank_account(string name, string pin, unsigned int num): accountName(name), pinCode(pin), accountNumber(num) {}
 
     // Main Methods
     unsigned short deposit(double amount){
         if (amount < 5)
-        
+
             return 1;
-        
+
         else if (amount > 10000)
 
             return 2;
-        
+
         else{
-        
+
             balance += amount;
             return 3;
 
@@ -39,18 +87,18 @@ public:
     }
     unsigned short withdraw(double amount){
         if (amount < 5)
-        
+
             return 1;
-        
+
         else if (amount > 10000)
 
             return 2;
-        
+
         else{
-        
+
             balance -= amount;
             return 3;
-            
+
         }
     }
     bool transfer(double amount, bank_account& account){
@@ -155,6 +203,7 @@ private:
     float gpa; // Out of 4 grading system
     float duration; // In years
     bank_account bank = {name, "000", ranking};
+    static int deadline; // In days
 
 public:
 
@@ -166,7 +215,7 @@ public:
             gpa(_gpa), duration(_duration), ranking(_ranking) {}
 
     bool operator >(const university& uni) const { // Compare universities
-        
+
         unsigned short score1 = 0, score2 = 0; // Score of acceptance difficulty
 
         (english_lvl > uni.english_lvl && english_lvl != uni.english_lvl) ? ++score1 : ++score2;
@@ -178,6 +227,11 @@ public:
     void showInList(int i) const {
         cout << "|[" << i+1 << "]| Uni: " << name << " | Country: " << country << " | Degree: " << degree_lvl << " | Programme: " << programme << " | Tuition Fees: " << tution_fees << "$.\n"
              << desc << "\n\n";
+    }
+
+    void display() const {
+        cout << "Uni: " << name << "\n | Country: " << country << "\n | Degree: " << degree_lvl << "\n | Programme: " << programme << "\n | Tuition Fees: " << tution_fees << "$.\n"
+             << desc << "\n\n\n";
     }
 
     friend bool basedOnProfile(user_account&, university&);
@@ -228,11 +282,8 @@ bool compareUniverisitiesByRanking(const university& un1, const university& uni2
     return uni1.getRanking() < uni2.getRanking();
 }
 
-// Data System Here (Mahrous Task)
 vector<bank_account> bank_accounts_data;
-
 vector<user_account> user_accounts_data;
-
 vector<university> universities_data = {uni1, uni2, uni3};
 
 
@@ -358,12 +409,12 @@ inline void studyFinderMainMenuDisplay(string username){
     cout << "\033[2J\033[1;1H";
     cout << "|=-=-=-=-=|    StudyFinder    |=-=-=-=-=|\n"
          << "|=-=-=-=-=|    Hi, " << username << "    |=-=-=-=-=|\n\n"
-         << "|[1]| Open Search Engine.\n"
-         << "|[2]| Display Accepted Applications.\n"
-         << "|[3]| Display Pending Applications.\n"
-         << "|[4]| Display Rejected Applications.\n"
-         << "|[5]| Student Profile Settings.\n"
-         << "|[6]| Account Security Settings.\n"
+         << "|[1]| Open Search Engine.\n";
+        //  << "|[2]| Display Accepted Applications.\n"
+        //  << "|[3]| Display Pending Applications.\n"
+        //  << "|[4]| Display Rejected Applications.\n"
+    cout << "|[2]| Student Profile Settings.\n"
+         << "|[3]| Account Security Settings.\n"
          << "|[0]| Sign Out.\n\n";
 }
 
@@ -483,7 +534,7 @@ int main(){
 
 // Main Functions ========================================================
 void bankLogin(unsigned int accountNumber = 0, string pinCode = "*** PIN Code...", unsigned short msg = 0){
-    
+
     bankLoginDisplay(accountNumber, pinCode, msg);
 
     switch(choose(0, 3)){
@@ -507,7 +558,7 @@ void bankLogin(unsigned int accountNumber = 0, string pinCode = "*** PIN Code...
                 for (int i = 0; i < bank_accounts_data.size(); ++i){
                     if (accountNumber == bank_accounts_data[i].getNumber()){
                         if (pinCode == bank_accounts_data[i].getPinCode()){
-                            
+
                             // SUCCESSFULLY LOGGED IN
 
                             bankMainMenu(bank_accounts_data[i], false);
@@ -557,14 +608,14 @@ void bankRegister(string accountName = "*** Account Name...", string pinCode = "
                 // For now I will use vectors as database so I can test the project --Ahmed Yasser Eissa
                 for (int i = 0; i < bank_accounts_data.size(); ++i){
                     if (accountName == bank_accounts_data[i].getName()){
-                        
+
                         // Found an existed account with same account name
 
                         bankRegister(accountName, pinCode, 1);
                         return;
                     }
                 }
-                
+
                 // Creating a new account
 
                 bank_account newBankAccount(accountName, pinCode, (bank_accounts_data.size() ? bank_accounts_data.back().getNumber() + 100 : 100100));
@@ -614,7 +665,7 @@ void bankWithdraw(bank_account& account, string amount = "*** Amount to withdraw
 
 }
 void bankChangePIN(bank_account& account, string c_pin = "*** Current PIN Code...", string n_pin = "*** New PIN Code...", unsigned short msg = 0){
-    
+
     bankChangePINDisplay(account.getName(), account.getBalance(), c_pin, n_pin, msg);
 
     switch(choose(0, 3)){
@@ -664,6 +715,8 @@ void bankMainMenu(bank_account& account, bool showInfo = false){
     }
 
 }
+
+
 
 void studyFinderLogin(string username_or_email = "*** Username/Email...", string password = "*** Password...", unsigned short msg = 0){
 
@@ -746,14 +799,14 @@ void studyFinderRegister(string username = "*** Username...", string email = "**
                 // For now I will use vectors as database so I can test the project --Ahmed Yasser Eissa
                 for (int i = 0; i < user_accounts_data.size(); ++i){
                     if (username == user_accounts_data[i].getUsername() || email == user_accounts_data[i].getEmail()){
-                        
+
                         // Found an existed account with same username/email
 
                         studyFinderRegister(username, email, password, 1);
                         return;
                     }
                 }
-                
+
                 // Creating a new account
 
                 user_account newUserAccount(username, email, password);
@@ -942,14 +995,20 @@ void studyFinderCustomSearch(user_account& account, string country = "___", stri
 void studyFinderSearchBasedOnProfile(user_account& account){
 
     for (int i = 0; i < universities_data.size(); ++i){
-    
+
         if (basedOnProfile(account, universities_data[i])){
-    
+
             universities_data[i].showInList(i);
-    
+
         }
     }
 }
+
+void studyFinderSelect(user_account& account, university& selectedUni){
+    selectedUni.display();
+    // Last Function u were working on
+}
+
 void studyFinderShowAllOptions(user_account& account){
 
     studyFinderShowAllOptionsDisplay(account.getUsername());
@@ -962,7 +1021,7 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.begin(), universities_data.end(), compareUniverisitiesByTuitionFees);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
@@ -975,7 +1034,7 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.rbegin(), universities_data.rend(), compareUniverisitiesByTuitionFees);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
@@ -988,7 +1047,7 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.begin(), universities_data.end(), compareUniverisitiesByRanking);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
@@ -1001,7 +1060,7 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.rbegin(), universities_data.rend(), compareUniverisitiesByRanking);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
@@ -1014,7 +1073,7 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.begin(), universities_data.end(), compareUniverisitiesByAcceptance);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
@@ -1027,27 +1086,25 @@ void studyFinderShowAllOptions(user_account& account){
                 sort(universities_data.rbegin(), universities_data.rend(), compareUniverisitiesByAcceptance);
 
                 for (int i = 0; i < universities_data.size(); ++i){
-                    
+
                     universities_data[i].showInList(i);
 
                 }
             }
             break;
-        case 0: studyFinderSearchEngine(account); return;
+        case 0: studyFinderMainMenu(account); return;
     }
 
     cout << "|[STUDY-FINDER]| Enter '0' to cancel selection...\n";
-    if (choose(0, universities_data.size())){
-        // Ahmed ElTweel Task
-
-        
-
+    unsigned short choice = choose(0, universities_data.size());
+    if (choice){
+        studyFinderSelect(account, universities_data[choice-1]);
     }else{
         studyFinderShowAllOptions(account);
     }
 
-
 }
+
 void studyFinderSearchEngine(user_account& account){
 
     studyFinderSearchEngineDisplay(account.getUsername());
@@ -1072,17 +1129,15 @@ void studyFinderMainMenu(user_account& account){
 
     studyFinderMainMenuDisplay(account.getUsername());
 
-    switch(choose(0, 6)){
-        case 1: studyFinderSearchEngine(account); break;
-        case 2: 
-        case 3: 
-        case 4: 
-        case 5: studentProfileSettings(account); break;
-        case 6: accountSecuritySettings(account); break;
+    switch(choose(0, 3)){
+        case 1: studyFinderShowAllOptions(account); break; 
+        case 2: studentProfileSettings(account); break;
+        case 3: accountSecuritySettings(account); break;
         case 0: studyFinder(); return;
     }
 
 }
+
 
 void start(){
     startDisplay();
