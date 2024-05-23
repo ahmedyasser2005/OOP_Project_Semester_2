@@ -1,34 +1,12 @@
-# Scholarship Database Interface
+# "Study Finder", OOP Project
 
 ## Description
-This is a simple interface for help our OOP Team-Project to save Scholarship System Data, With high speed, quality and performance.
+The "Study Finder" project is designed to simplify the process of searching for and applying to various study opportunities, such as academic programs, courses, or scholarships. Utilizing the principles of Object-Oriented Programming (OOP), this application aims to provide users with a comprehensive platform where they can not only discover educational opportunities but also manage the entire application process, including fee payments, all in one place. The system integrates a robust bank payment module to ensure secure and efficient transactions. By streamlining these processes, Study Finder aims to enhance accessibility to education and support users in achieving their academic and professional goals.
 
-
-## Used Libraries
-- sqlite3
-
-## Code Practice (Syntax)
-- ### Vriable naming
-    Kabab case with pre-underscore: ex. for private data in c++
-
-        _expire_date = 0;
-        _create_date = 0;
- 
-- ### Methods naming
-    camel case:
-
-        getName();
-
-## App
-        - Uing code 
 ## Team Members
-- Mahros AL-Qabasy
-- Ahmed Yaser Eissa
-- Ahmed Yaser Lotfy
-- Mostafa Saleh
-- AL-Desouky
-- Khadiga
-
-## Instructor (Our inspiration)
-#### Under Supervision of: Dr.Mahmoud Safwet.
-- He studied in England and has extensive experience in this field.
+- Ahmed Yasser Eissa
+- Khadija Osama Ahmed
+- Mostafa Mohamed Saleh
+- Mahros Mohamed Mahros
+- Ahmed Yasser Lotfy
+- Youssef Ahmed Eldasoky
